@@ -41,7 +41,7 @@ export function TabBar({ state, descriptors, navigation }) {
                         onLongPress={onLongPress}
                         isFocused={isFocused}
                         routeName={route.name} // Verifique se os nomes das rotas estão corretos
-                        color={isFocused ? '#38A69D' : '#222'}
+                        color={isFocused ? '#5f9ea0' : '#222'}
                         label={label}
                     />
                 );

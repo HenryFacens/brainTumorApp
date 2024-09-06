@@ -48,7 +48,7 @@ export default function SignIn() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#38A69D",
+        backgroundColor: "#5f9ea0",
     },
     containerHeader: {
         marginTop: '14%',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         frontSize: 16,
     },
     button: {
-        backgroundColor: "#38A69D",
+        backgroundColor: "#5f9ea0",
         width: "100%",
         paddingVertical: 8,
         borderRadius: 4,

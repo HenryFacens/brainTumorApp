@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 const TabBarButton = ({ onPress, onLongPress, isFocused, routeName, color, label }) => {
-    const IconComponent = icon[routeName] || (() => <Feather name='alert-circle' size={24} color={isFocused ? '#38A69D' : '#222'} />);
+    const IconComponent = icon[routeName] || (() => <Feather name='alert-circle' size={24} color={isFocused ? '#5f9ea0' : '#222'} />);
     const scale = useSharedValue(0);
 
     useEffect(
@@ -42,9 +42,9 @@ const TabBarButton = ({ onPress, onLongPress, isFocused, routeName, color, label
             style={styles.tabbarButton}
         >
             <Animated.View style={animatedIconStyle}>
-                <IconComponent color={isFocused ? '#38A69D' : '#222'} />
+                <IconComponent color={isFocused ? '#5f9ea0' : '#222'} />
             </Animated.View>
-            <Animated.Text style={[{ color: isFocused ? '#38A69D' : '#222', fontSize: 12 }, animatedTextStyle]}>
+            <Animated.Text style={[{ color: isFocused ? '#5f9ea0' : '#222', fontSize: 12 }, animatedTextStyle]}>
                 {label}
             </Animated.Text>
         </Pressable>
