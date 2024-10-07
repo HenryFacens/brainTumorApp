@@ -5,6 +5,7 @@ import Routes from './src/routes';
 import { LogBox } from 'react-native';
 LogBox.ignoreAllLogs(true);
 
+// const app = initializeApp(firebaseConfig);
 
 import AuthProvider from './src/contexts/auth';
 

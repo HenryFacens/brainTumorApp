@@ -1,35 +1,34 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import * as Animatable from 'react-native-animatable';
-
-
 import { useNavigation } from "@react-navigation/native";
 
 export default function Welcome() {
+    const [content, setContent] = useState(null); // Estado para armazenar o conteúdo da API
+    const [loading, setLoading] = useState(true); // Estado para controlar o loading
+
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
-
-            <View >
-                <Animatable.Image
-                    animation={{
-                        from: {
-                            opacity: 0,
-                            translateY: 200,
-                            rotateY: '0deg'
-                        },
-                        to: {
-                            opacity: 1,
-                            translateY: 0,
-                            rotateY: '360deg'
-                        }
-                    }}
-                    duration={1500}
-                    delay={500}
-                    source={require("../../assets/logo.png")}
-                />
-            </View>
+        <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor="#5f9ea0" />
+            <Animatable.Image
+                animation={{
+                    from: {
+                        opacity: 0,
+                        translateY: 200,
+                        rotateY: '0deg'
+                    },
+                    to: {
+                        opacity: 1,
+                        translateY: 0,
+                        rotateY: '360deg'
+                    }
+                }}
+                duration={1500}
+                delay={500}
+                source={require("../../assets/logo.png")}
+            />
 
             <View style={styles.containerButtons}>
                 {/* Botão de Sign In */}
@@ -42,8 +41,7 @@ export default function Welcome() {
                     <Text style={styles.buttonText}>Request Login</Text>
                 </TouchableOpacity>
             </View>
-
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -56,8 +54,8 @@ const styles = StyleSheet.create({
     },
     containerButtons: {
         flex: 1,
-        justifyContent: "center", // Centraliza os botões verticalmente
-        alignItems: "center",      // Centraliza os botões horizontalmente
+        justifyContent: "center",
+        alignItems: "center",
         marginBottom: 30,
         width: '100%',
     },
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
         width: '60%',
         alignItems: "center",
         justifyContent: "center",
-        marginVertical: 10,  // Espaçamento entre os botões
+        marginVertical: 10,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
@@ -80,9 +78,22 @@ const styles = StyleSheet.create({
         color: "#2b2a29",
         fontWeight: "bold",
     },
-    logo: {
-        width: '80%',
-        height: '80%',
-        resizeMode: "contain",
+    priceContainer: {
+        marginVertical: 20,
+        alignItems: "center",
+    },
+    priceText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#fff",
+    },
+    priceValue: {
+        fontSize: 20,
+        color: "#fff",
+    },
+    loadingText: {
+        fontSize: 18,
+        color: "#fff",
     },
 });
+

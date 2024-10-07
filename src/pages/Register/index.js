@@ -1,21 +1,49 @@
-import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
-import { AuthContext } from "../../contexts/auth";
+const firebaseConfig = {
+    apiKey: "AIzaSyC5DLML7Qspl5nt-YIcqbixTyc8gWBF7AI",
+    authDomain: "braintumor-d8157.firebaseapp.com",
+    projectId: "braintumor-d8157",
+    storageBucket: "braintumor-d8157.appspot.com",
+    messagingSenderId: "901967792227",
+    appId: "1:901967792227:web:ff9eefde2e31ad701f9056",
+    measurementId: "G-T15F4038ZG"
+};
 
-export default function Register() {
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-    const [crm, setCrm] = useState('');
-    const { Register } = useContext(AuthContext);
+export default function Register({ setCrm, setName, email, setEmail, password, setPassword, crm, name }) {
 
-    function handleRegister() {
-        Register(email, password, crm, name);
-    }
+    const handleAuth = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+
+                // Store the additional information in Firestore
+                setDoc(doc(firestore, 'users', user.uid), {
+                    name: name,
+                    crm: crm,
+                    email: email
+                })
+                    .then(() => {
+                        console.log('User registered and data saved successfully.');
+                    })
+                    .catch((error) => {
+                        console.error('Error saving user data: ', error);
+                    });
+
+            })
+            .catch((error) => {
+                console.error('Error registering user: ', error);
+            });
+    };
 
     return (
         <View style={styles.container}>
@@ -29,32 +57,32 @@ export default function Register() {
                 <Animatable.View>
                     <Animatable.Image />
                 </Animatable.View>
-
             </Animatable.View>
+
             <Animatable.View style={styles.containerForm}
                 animation="fadeInUp"
                 delay={500}>
                 <Text style={styles.message}>Name</Text>
                 <TextInput placeholder="Name" style={styles.input} value={name}
-                    onChangeText={(text) => setName(text)} />
+                    onChangeText={setName} />
                 <Text style={styles.message}>CRM</Text>
                 <TextInput placeholder="CRM" style={styles.input} value={crm}
-                    onChangeText={(text) => setCrm(text)} />
+                    onChangeText={setCrm} />
                 <Text style={styles.message}>E-mail</Text>
                 <TextInput placeholder="E-mail" style={styles.input} value={email}
-                    onChangeText={(text) => setEmail(text)} />
+                    onChangeText={setEmail} />
                 <Text style={styles.message}>Password</Text>
                 <TextInput placeholder="Password" style={styles.input}
                     value={password}
                     secureTextEntry={true}
-                    onChangeText={(text) => setPassword(text)} />
-                <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                    <Text style={styles.buttonText}>Request</Text>
+                    onChangeText={setPassword} />
+                <TouchableOpacity style={styles.button} onPress={handleAuth}>
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
             </Animatable.View>
         </View >
     );
-};
+}
 
 
 const styles = StyleSheet.create({
