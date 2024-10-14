@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, Text } from 'react-native';
 
-const AnswerTask = (props) => {
-
+const AnswerTask = ({ imageUri }) => {
     return (
-        <View style={styles.item}>
-
+        <View styles={styles.item}>
+            {imageUri ? (
+                <Image
+                    source={{ uri: imageUri }}
+                    style={{ width: 300, height: 300, marginTop: 20 }}
+                />
+            ) : (
+                <Text>Nenhuma imagem enviada ainda.</Text>
+            )}
         </View>
     );
 };
@@ -17,7 +23,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center', // Centraliza o conteúdo horizontalmente
+        justifyContent: 'center',
         marginBottom: 20,
         shadowColor: '#000',
         shadowOffset: {

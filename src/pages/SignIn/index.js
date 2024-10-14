@@ -1,18 +1,20 @@
 import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import * as Animatable from 'react-native-animatable';
 
 import { AuthContext } from "../../contexts/auth";
 
 export default function SignIn() {
-
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { signIn } = useContext(AuthContext);
 
     function handleSignIn() {
-        signIn(email, password);
+        // signIn(email, password);
+        navigation.navigate('Home');
     }
 
     return (

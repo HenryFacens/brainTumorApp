@@ -1,121 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, Alert, Linking } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as DocumentPicker from 'expo-document-picker'; // Certifique-se de importar o DocumentPicker
-import { Feather } from '@expo/vector-icons'; // Certifique-se de ter @expo/vector-icons instalado
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Alert, Linking, Image, StyleSheet } from 'react-native';
+import pickDocuments from '../../../../contexts/pickDocuments';
+import uploadFiles from '../../../../contexts/uploadFiles';
 
-const TaskImage = (props) => {
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [selectedFile, setSelectedFile] = useState(null);
+export default function TaskImage({ setImageUri }) {
+    const [selectedFiles, setSelectedFiles] = useState([]);
 
-    // Solicitar permissão para usar a câmera
-    useEffect(() => {
-        (async () => {
-            const { status } = await ImagePicker.requestCameraPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert('Permissão necessária', 'Precisamos de permissão para acessar sua câmera.');
-            }
-        })();
-    }, []);
-
-    const pickDocument = async () => {
-        try {
-            let result = await DocumentPicker.getDocumentAsync({
-                type: 'application/pdf',
-                copyToCacheDirectory: true,
-            });
-
-            console.log('Resultado do DocumentPicker:', result); // Verifica o resultado completo
-
-            if (result.canceled === false && result.assets && result.assets.length > 0) {
-                const selectedAsset = result.assets[0]; // Acessa o primeiro arquivo selecionado
-                setSelectedFile({ uri: selectedAsset.uri, name: selectedAsset.name }); // Salva o URI e o nome do arquivo
-                setSelectedImage(null); // Limpa a imagem se um PDF for selecionado
-                console.log('PDF selecionado:', selectedAsset.uri);
-            } else {
-                console.log('Nenhum arquivo selecionado');
-                Alert.alert('Erro', 'Nenhum arquivo foi selecionado');
-            }
-        } catch (error) {
-            console.log('Erro ao selecionar PDF:', error);
-            Alert.alert('Erro', 'Ocorreu um erro ao selecionar o PDF.');
+    const handleUploadFiles = async () => {
+        if (selectedFiles.length === 0) {
+            Alert.alert('Erro', 'Nenhum arquivo selecionado para upload.');
+            return;
         }
-    };
-
-    const takePhoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri); // URI da imagem capturada
-            setSelectedFile(null); // Limpa o arquivo PDF se uma imagem for selecionada
-        }
-    };
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri); // URI da imagem selecionada
-            setSelectedFile(null); // Limpa o arquivo PDF se uma imagem for selecionada
-        }
-    };
-
-    const openPdf = () => {
-        if (selectedFile && selectedFile.uri) {
-            Linking.openURL(selectedFile.uri).catch((err) => Alert.alert('Erro ao abrir o PDF:', err));
-        } else {
-            Alert.alert('Nenhum arquivo PDF selecionado');
-        }
+        await uploadFiles(selectedFiles, setImageUri);
     };
 
     return (
-        <View style={styles.item}>
-            {props.text === 1 ? (
-                <View>
-                    <View style={styles.imageTask}>
-                        <TouchableOpacity style={styles.uploadButton} onPress={takePhoto}>
-                            <Feather name="camera" size={24} color="#fff" />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
-                            <Text style={styles.uploadButtonText}>Upload Document</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-                            <Feather name="image" size={24} color="#fff" />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.imageRow}>
-                        {selectedImage && (
-                            <View style={styles.imageRow}>
-                                <Image source={{ uri: selectedImage }} style={styles.image} />
-                            </View>
-                        )}
+        <View styles={styles.item}>
+            <View style={styles.imageTask}>
+                <TouchableOpacity
+                    style={styles.uploadButton}
+                    onPress={async () => {
+                        const files = await pickDocuments();
+                        if (files) {
+                            setSelectedFiles(files);
+                        }
+                    }}
+                >
+                    <Text style={styles.uploadButtonText}>Upload</Text>
+                </TouchableOpacity>
 
-                        {selectedFile && (
-                            <View style={styles.fileContainer}>
-                                <Text style={styles.fileText}> PDF selecionado: {selectedFile.name}</Text>
-                                <TouchableOpacity style={styles.openButton} onPress={openPdf}>
-                                    <Text style={styles.openButtonText}>Abrir PDF</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
+                <TouchableOpacity style={styles.uploadButton} onPress={handleUploadFiles}>
+                    <Text style={styles.uploadButtonText}>Enviar</Text>
+                </TouchableOpacity>
+            </View>
+
+            <ScrollView style={styles.fileList}>
+                {selectedFiles.map((file, index) => (
+                    <View key={index} style={styles.fileContainer}>
+                        <Text style={styles.fileText}>Arquivo: {file.name}</Text>
                     </View>
-                </View>
-            ) : (
-                <Text style={styles.itemLeft}>{props.text}</Text>
-            )}
+                ))}
+            </ScrollView>
         </View>
     );
-};
+}
+
 
 const styles = StyleSheet.create({
     item: {
@@ -192,5 +121,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-
-export default TaskImage;

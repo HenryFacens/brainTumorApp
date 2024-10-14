@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Text, StatusBar, SafeAreaView } from 'react-native';
 import TaskImage from './components/TaskImage';
 import AnswerTask from './components/AnswerTask';
@@ -6,6 +7,8 @@ import * as Animatable from 'react-native-animatable';
 
 
 export function HomeScreen() {
+    const [imageUri, setImageUri] = useState(null);
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="#5f9ea0" />
@@ -20,13 +23,13 @@ export function HomeScreen() {
                     <Text style={styles.subTitle}>Step 1</Text>
                 </View>
                 <View style={styles.items}>
-                    <TaskImage text={1} />
+                    <TaskImage setImageUri={setImageUri} />
                 </View>
                 <View style={styles.subConteiner}>
                     <Text style={styles.subTitle}>Step 2</Text>
                 </View>
                 <View style={styles.items}>
-                    <AnswerTask text={1} />
+                    <AnswerTask imageUri={imageUri} />
                 </View>
             </Animatable.View>
         </SafeAreaView>
