@@ -6,34 +6,45 @@ import AnswerTask from './components/AnswerTask';
 import * as Animatable from 'react-native-animatable';
 
 export function HomeScreen() {
-    // Estado para armazenar a URI da imagem
     const [imageUri, setImageUri] = useState(null);
+    const [comment, setComment] = useState('');
+
+    // const handleUpload = async (selectedFiles) => {
+    //     const resultComment = await uploadFiles(selectedFiles, setImageUri);
+    //     if (resultComment) {
+    //         console.log('resultComment', resultComment);
+    //         setComment(resultComment); // Atualiza o comentário
+    //         console.log('Updated comment:', comment); // Log após setComment
+    //     }
+    // };
+
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor="#5f9ea0" />
+            <StatusBar barStyle="light-content" backgroundColor="black" />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Animatable.View style={styles.containerHeader}
-                    animation={"fadeInLeft"}
-                    delay={1000}>
-                    <Text style={styles.title}>Welcome !</Text>
+                <Animatable.View style={styles.containerHeader} animation="fadeInLeft" delay={1000}>
+                    <Text style={styles.title}>Welcome!</Text>
                 </Animatable.View>
-                <Animatable.View style={styles.containerForm}
-                    animation="fadeInUp" delay={500}>
-                    <View style={styles.subConteiner}>
-                        <Text style={styles.subTitle}>Step 1 - Send archive .nii</Text>
 
-                    </View>
-                    <View style={styles.items}>
-                        {/* Passa a função setImageUri para o TaskImage */}
-                        <TaskImage setImageUri={setImageUri} />
-                    </View>
+                <Animatable.View style={styles.containerForm} animation="fadeInUp" delay={500}>
                     <View style={styles.subConteiner}>
-                        <Text style={styles.subTitle}>Step 2 - View result and diagnostic</Text>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={styles.subTitle}>Step 1 - Send archive .nii</Text>
+                        </View>
+
+                        {/* Passa a função handleUpload para TaskImage */}
+                        <TaskImage setImageUri={setImageUri} setComment={setComment} />
                     </View>
-                    <View style={styles.items}>
-                        {/* Passa a imageUri para o AnswerTask */}
-                        <AnswerTask imageUri={imageUri} />
+
+                    <View style={styles.subConteiner}>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={styles.subTitle}>Step 2 - View result</Text>
+                        </View>
+                        {/* Exibe a imagem e o comentário resultante */}
+                        <AnswerTask imageUri={imageUri} comment={comment} />
+                    </View><View style={styles.subConteiner}>
+                        <View style={{ paddingTop: '30 %' }}></View>
                     </View>
                 </Animatable.View>
             </ScrollView>
@@ -41,19 +52,13 @@ export function HomeScreen() {
     );
 }
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#5f9ea0',
     },
-    scrollContainer: {
-        paddingVertical: 20,
-        paddingBottom: '50%', // Para garantir espaço ao final da rolagem
-    },
-    listWrapper: {
-        paddingTop: 50,
-        paddingHorizontal: 20,
-    },
+
     items: {
         paddingTop: 20,
     },
@@ -63,11 +68,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     subConteiner: {
-        paddingTop: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: '#2b2a29',
         borderStyle: 'solid',
+        borderRadius: 30,
+        width: '100%',           // Ocupa toda a largura disponível
+        padding: 30,             // Espaçamento interno
+        backgroundColor: '#f0f0f0', // Opcional: cor de fundo para visualização
+        margin: 20,     // Margem nas laterais
+
     },
     subTitle: {
         fontSize: 24,
@@ -76,16 +83,26 @@ const styles = StyleSheet.create({
     },
     containerForm: {
         flex: 1,
-        borderTopRightRadius: 30,
-        borderTopLeftRadius: 30,
-        paddingStart: '5%',
-        paddingEnd: '5%',
-        backgroundColor: '#f1f1f1',
-        paddingBottom: 20, // Para permitir espaço extra quando for rolado
+        flexDirection: 'column',  // Altera para 'column' para alinhar verticalmente
+        alignItems: 'center',     // Centraliza horizontalmente os subconteineres
+        justifyContent: 'flex-start', // Alinha no topo verticalmente
     },
     containerHeader: {
-        marginTop: '14%',
+        flex: 1,
+        flexDirection: 'column',
         paddingStart: '5%',
-        paddingBottom: '8%',
+        paddingTop: '8%',
+        alignItems: 'start',          // Centraliza horizontalmente
+        justifyContent: 'center',  // Alinha no topo verticalmente
+        backgroundColor: '#5f9ea0',
+    },
+    footer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'black',
+    },
+    footerText: {
+        color: '#fff',
+        fontSize: 12,
     },
 });

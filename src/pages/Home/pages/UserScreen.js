@@ -8,7 +8,6 @@ export function UserScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="#5f9ea0" />
-
             <Animatable.View style={styles.containerHeader}
                 animation={"fadeInLeft"}
                 delay={1000}>

@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
 
-const AnswerTask = ({ imageUri }) => {
+const AnswerTask = ({ imageUri, comment }) => {
+    console.log('comment Answer', comment);
     return (
-        <View styles={styles.item}>
+        <View >
             {imageUri ? (
                 <Image
                     source={{ uri: imageUri }}
-                    style={{ width: 300, height: 300, marginTop: 20 }}
+                    style={styles.image}
                 />
             ) : (
-                <Text>Nenhuma imagem enviada ainda.</Text>
+                <Text style={styles.placeholderText}></Text>
+            )}
+            {comment && (
+                <View style={styles.TextView}>
+                    <Text style={styles.commentText}>Comentário: {comment}</Text>
+                </View>
             )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    TextView: { flex: 1, marginTop: 10, backgroundColor: '#5f9ea0', padding: 10, borderRadius: 10 },
+    commentText: { fontSize: 16, color: 'white', },
     item: {
         backgroundColor: '#fff',
         padding: 15,
@@ -34,35 +42,12 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    itemLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-    },
-    imageTask: {
-        flexDirection: 'column',
-        alignItems: 'center', // Centraliza o conteúdo na vertical
-        justifyContent: 'center', // Centraliza o conteúdo na horizontal
-    },
-    uploadButton: {
-        backgroundColor: '#5f9ea0',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 10,
-    },
-    uploadButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
     image: {
-        width: 100,
-        height: 100,
-        marginTop: 10,
+        width: 300,
+        height: 300,
+        marginTop: 20,
         borderRadius: 10,
+        resizeMode: 'contain',
     },
 });
 

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Alert, Linking, Image, StyleS
 import pickDocuments from '../../../../contexts/pickDocuments';
 import uploadFiles from '../../../../contexts/uploadFiles';
 
-export default function TaskImage({ setImageUri }) {
+export default function TaskImage({ setImageUri, setComment }) {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const handleUploadFiles = async () => {
@@ -11,7 +11,7 @@ export default function TaskImage({ setImageUri }) {
             Alert.alert('Erro', 'Nenhum arquivo selecionado para upload.');
             return;
         }
-        await uploadFiles(selectedFiles, setImageUri);
+        await uploadFiles(selectedFiles, setImageUri, setComment);
     };
 
     return (
